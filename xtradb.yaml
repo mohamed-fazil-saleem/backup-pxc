@@ -49,8 +49,8 @@ spec:
     storages:
       tardis-sql:
         s3:
-          bucket: tardis-ai-pipelines
-          credentialsSecret: tardis-ai-pipeline-s3
+          bucket: pxc
+          credentialsSecret: minio-key
           # region: us-west-2
-          endpointUrl: "https://s3.amazonaws.com"
+          endpointUrl: "http://minio.minio:9000"
         type: s3
