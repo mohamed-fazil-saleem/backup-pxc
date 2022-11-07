@@ -5,7 +5,7 @@ metadata:
 spec:
   pxcCluster: tardis-sql
   backupSource:
-    destination: $BACKUPPATH
+    destination: '{{env "BACKUPPATH"}}'
     s3:
       credentialsSecret: minio-key
       endpointUrl: http://minio.minio:9000
