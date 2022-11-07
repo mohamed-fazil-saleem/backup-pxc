@@ -1,0 +1,56 @@
+apiVersion: pxc.percona.com/v1-11-0
+kind: PerconaXtraDBCluster
+metadata:
+  name: tardis-sql
+spec:
+  crVersion: 1.11.0
+  secretsName: tardis-sql-secrets
+  allowUnsafeConfigurations: true
+  upgradeOptions:
+    apply: 8.0-recommended
+    schedule: "0 4 * * *"
+  pxc:
+    size: 2
+    image: percona/percona-xtradb-cluster:8.0.27-18.1
+    autoRecovery: true
+    affinity: 
+      antiAffinityTopologyKey: "none"
+    volumeSpec:
+      persistentVolumeClaim:
+        resources:
+          requests:
+            storage: 3G
+  haproxy:
+    enabled: false
+    size: 1
+    image: percona/percona-xtradb-cluster-operator:1.11.0-haproxy
+    affinity: 
+      antiAffinityTopologyKey: "none"
+
+  proxysql:
+    enabled: true
+    size: 1
+    image: percona/percona-xtradb-cluster-operator:1.11.0-proxysql
+    affinity: 
+      antiAffinityTopologyKey: "none"
+    volumeSpec:
+      persistentVolumeClaim:
+        resources:
+          requests:
+            storage: 3G
+
+  logcollector:
+    enabled: true
+    image: percona/percona-xtradb-cluster-operator:1.11.0-logcollector
+  
+  backup:
+    image: percona/percona-xtradb-cluster-operator:1.11.0-pxc8.0-backup
+    serviceAccountName: percona-xtradb-cluster-operator
+    storages:
+      tardis-sql:
+        s3:
+          bucket: tardis-ai-pipelines
+          credentialsSecret: tardis-ai-pipeline-s3
+          # region: us-west-2
+          endpointUrl: "https://s3.amazonaws.com"
+        type: s3
