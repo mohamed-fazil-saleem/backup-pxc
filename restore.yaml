@@ -1,11 +1,11 @@
-apiVersion: "pxc.percona.com/v1"
-kind: "PerconaXtraDBClusterRestore"
+apiVersion: pxc.percona.com/v1
+kind: PerconaXtraDBClusterRestore
 metadata:
-  name: "tardis-sql-restore"
+  name: tardis-sql-restore
 spec:
-  pxcCluster: "tardis-sql"
+  pxcCluster: tardis-sql
   backupSource:
     destination: ${BACKUPPATH}
     s3:
-      credentialsSecret: "minio-key"
-      endpointUrl: "http://minio.minio:9000"
+      credentialsSecret: minio-key
+      endpointUrl: http://minio.minio:9000
